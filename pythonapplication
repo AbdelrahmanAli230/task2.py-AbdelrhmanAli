@@ -1,0 +1,49 @@
+class Participant:
+    def __init__(self, name, is_team=False):
+        self.name = name
+        self.is_team = is_team
+        self.scores = []
+    
+    def add_score(self, event, score):
+        self.scores.append((event, score))
+
+    def total_score(self):
+        return sum(score for event, score in self.scores)
+
+
+class Tournament:
+    def __init__(self):
+        self.participants = []
+        self.events = []
+
+    def add_participant(self, name, is_team=False):
+        participant = Participant(name, is_team)
+        self.participants.append(participant)
+        return participant
+
+    def add_event(self, event_name):
+        self.events.append(event_name)
+
+    def record_score(self, participant, event, score):
+        participant.add_score(event, score)
+
+    def show_leaderboard(self):
+        leaderboard = sorted(self.participants, key=lambda p: p.total_score(), reverse=True)
+        for participant in leaderboard:
+            print(f"{participant.name}: {participant.total_score()} points")
+
+# Example usage
+tournament = Tournament()
+tournament.add_event("Event 1")
+tournament.add_event("Event 2")
+
+# Adding participants
+team1 = tournament.add_participant("Team A", is_team=True)
+ind1 = tournament.add_participant("Student 1", is_team=False)
+
+# Recording scores
+tournament.record_score(team1, "Event 1", 15)
+tournament.record_score(ind1, "Event 1", 20)
+
+# Show leaderboard
+tournament.show_leaderboard()
